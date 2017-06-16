@@ -1,29 +1,29 @@
-var Accessor = {
-  IDENTITY_FN: function(input) { return input; },
+export default class Accessor {
+  static identityFunction(input) {
+    return input;
+  }
 
-  generateAccessor: function(field) {
+  generateAccessor(field) {
     return function(object) { return object[field]; };
-  },
+  }
 
-  generateOptionToStringFor: function(prop) {
-    if (typeof prop === 'string') {
+  generateOptionToStringFor(prop) {
+    if (typeof prop === "string") {
       return this.generateAccessor(prop);
-    } else if (typeof prop === 'function') {
+    } else if (typeof prop === "function") {
       return prop;
     } else {
-      return this.IDENTITY_FN;
+      return Accessor.identityFunction;
     }
-  },
+  }
 
-  valueForOption: function(option, object) {
-    if (typeof option === 'string') {
+  valueForOption(option, object) {
+    if (typeof option === "string") {
       return object[option];
-    } else if (typeof option === 'function') {
+    } else if (typeof option === "function") {
       return option(object);
     } else {
       return object;
     }
-  },
+  }
 };
-
-module.exports = Accessor;
