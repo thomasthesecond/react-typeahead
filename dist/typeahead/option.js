@@ -1,3 +1,5 @@
+'use strict';
+
 var React = require('react');
 var classNames = require('classnames');
 
@@ -5,6 +7,8 @@ var classNames = require('classnames');
  * A single option within the TypeaheadSelector
  */
 var TypeaheadOption = React.createClass({
+  displayName: 'TypeaheadOption',
+
   propTypes: {
     customClasses: React.PropTypes.object,
     customValue: React.PropTypes.string,
@@ -13,16 +17,16 @@ var TypeaheadOption = React.createClass({
     hover: React.PropTypes.bool
   },
 
-  getDefaultProps: function() {
+  getDefaultProps: function getDefaultProps() {
     return {
       customClasses: {},
-      onClick: function(event) {
+      onClick: function onClick(event) {
         event.preventDefault();
       }
     };
   },
 
-  render: function() {
+  render: function render() {
     var classes = {};
     classes[this.props.customClasses.hover || "hover"] = !!this.props.hover;
     classes[this.props.customClasses.listItem] = !!this.props.customClasses.listItem;
@@ -33,29 +37,30 @@ var TypeaheadOption = React.createClass({
 
     var classList = classNames(classes);
 
-    return (
-      <li className={classList} onClick={this._onClick}>
-        <a href="javascript: void 0;" className={this._getClasses()} ref="anchor">
-          { this.props.children }
-        </a>
-      </li>
+    return React.createElement(
+      'li',
+      { className: classList, onClick: this._onClick },
+      React.createElement(
+        'a',
+        { href: 'javascript: void 0;', className: this._getClasses(), ref: 'anchor' },
+        this.props.children
+      )
     );
   },
 
-  _getClasses: function() {
+  _getClasses: function _getClasses() {
     var classes = {
-      "typeahead-option": true,
+      "typeahead-option": true
     };
     classes[this.props.customClasses.listAnchor] = !!this.props.customClasses.listAnchor;
 
     return classNames(classes);
   },
 
-  _onClick: function(event) {
+  _onClick: function _onClick(event) {
     event.preventDefault();
     return this.props.onClick(event);
   }
 });
-
 
 module.exports = TypeaheadOption;

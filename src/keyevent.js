@@ -1,13 +1,11 @@
-/**
- * PolyFills make me sad
- */
-const KeyEvent = KeyEvent || {};
-KeyEvent.DOM_VK_UP = KeyEvent.DOM_VK_UP || 38;
-KeyEvent.DOM_VK_DOWN = KeyEvent.DOM_VK_DOWN || 40;
-KeyEvent.DOM_VK_BACK_SPACE = KeyEvent.DOM_VK_BACK_SPACE || 8;
-KeyEvent.DOM_VK_RETURN = KeyEvent.DOM_VK_RETURN || 13;
-KeyEvent.DOM_VK_ENTER = KeyEvent.DOM_VK_ENTER || 14;
-KeyEvent.DOM_VK_ESCAPE = KeyEvent.DOM_VK_ESCAPE || 27;
-KeyEvent.DOM_VK_TAB = KeyEvent.DOM_VK_TAB || 9;
+const keyEvent = {};
 
-export default KeyEvent;
+keyEvent.DOM_VK_UP = keyEvent.DOM_VK_UP || 38;
+keyEvent.DOM_VK_DOWN = keyEvent.DOM_VK_DOWN || 40;
+keyEvent.DOM_VK_BACKSPACE = keyEvent.DOM_VK_BACKSPACE || 8;
+keyEvent.DOM_VK_RETURN = keyEvent.DOM_VK_RETURN || 13;
+keyEvent.DOM_VK_ENTER = keyEvent.DOM_VK_ENTER || 14;
+keyEvent.DOM_VK_ESCAPE = keyEvent.DOM_VK_ESCAPE || 27;
+keyEvent.DOM_VK_TAB = keyEvent.DOM_VK_TAB || 9;
+
+export default keyEvent;

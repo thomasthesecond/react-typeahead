@@ -303,7 +303,7 @@ describe('TypeaheadTokenizer Component', function() {
         assert.equal(startLength, results.length);
 
         // Now press backspace with the empty entry
-        TestUtils.Simulate.keyDown(entry, { keyCode: Keyevent.DOM_VK_BACK_SPACE });
+        TestUtils.Simulate.keyDown(entry, { keyCode: Keyevent.DOM_VK_BACKSPACE });
         results = getTokens(this.component);
         assert.equal(results.length + 1, startLength);
       });
@@ -314,7 +314,7 @@ describe('TypeaheadTokenizer Component', function() {
 
         input.value = "hello";
         TestUtils.Simulate.change(input);
-        TestUtils.Simulate.keyDown(input, { keyCode: Keyevent.DOM_VK_BACK_SPACE });
+        TestUtils.Simulate.keyDown(input, { keyCode: Keyevent.DOM_VK_BACKSPACE });
 
         results = getTokens(this.component);
         assert.equal(startLength , results.length);

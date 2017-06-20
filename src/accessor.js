@@ -3,27 +3,27 @@ export default class Accessor {
     return input;
   }
 
-  generateAccessor(field) {
-    return function(object) { return object[field]; };
+  static generateAccessor(field) {
+    return (object) => object[field];
   }
 
-  generateOptionToStringFor(prop) {
+  static generateOptionToStringFor(prop) {
     if (typeof prop === "string") {
-      return this.generateAccessor(prop);
+      return Accessor.generateAccessor(prop);
     } else if (typeof prop === "function") {
       return prop;
-    } else {
-      return Accessor.identityFunction;
     }
+
+    return Accessor.identityFunction;
   }
 
-  valueForOption(option, object) {
+  static valueForOption(option, object) {
     if (typeof option === "string") {
       return object[option];
     } else if (typeof option === "function") {
       return option(object);
-    } else {
-      return object;
     }
+
+    return object;
   }
-};
+}
