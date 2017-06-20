@@ -51,7 +51,8 @@ class Typeahead extends Component {
     this.setEntryText = this.setEntryText.bind(this);
     this.hasCustomValue = this.hasCustomValue.bind(this);
     this.getCustomValue = this.getCustomValue.bind(this);
-    this.makeDropdownVisible = this.makeDropdownVisible.bind(this);
+    this.showDropdown = this.showDropdown.bind(this);
+    this.hideDropdown = this.hideDropdown.bind(this);
     this.renderIncrementalSearchResults = this.renderIncrementalSearchResults.bind(this);
     this.focus = this.focus.bind(this);
     this.getSelection = this.getSelection.bind(this);
@@ -73,6 +74,7 @@ class Typeahead extends Component {
     this.renderHiddenInput = this.renderHiddenInput.bind(this);
     this.generateSearchFunction = this.generateSearchFunction.bind(this);
     this.hasHint = this.hasHint.bind(this);
+    this.handleWindowClose = this.handleWindowClose.bind(this);
     this.renderAriaMessageForOptions = this.renderAriaMessageForOptions.bind(this);
     this.renderAriaMessageForIncomingOptions = this.renderAriaMessageForIncomingOptions.bind(this);
   }
@@ -82,6 +84,17 @@ class Typeahead extends Component {
 
     this.activeDescendantId = `typeaheadActiveDescendant-${uniqueId}`;
     this.optionsId = `typeaheadOptions-${uniqueId}`;
+  }
+
+  componentDidMount() {
+    if (typeof window !== "undefined") {
+      // The `focus` event does not bubble, so we must capture it instead.
+      // This closes Typeahead's dropdown whenever something else gains focus.
+      window.addEventListener("focus", this.handleWindowClose, true);
+
+      // If we click anywhere outside of Typeahead, close the dropdown.
+      window.addEventListener("click", this.handleWindowClose, false);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -99,7 +112,14 @@ class Typeahead extends Component {
     // console.log(entryValue !== prevState.entryValue);
 
     if (entryValue !== prevState.entryValue && !prevState.isDropdownVisible) {
-      this.makeDropdownVisible();
+      this.showDropdown();
+    }
+  }
+
+  componentWillUnmount() {
+    if (typeof window !== "undefined") {
+      window.removeEventListener("focus", this.handleWindowClose, true);
+      window.removeEventListener("click", this.handleWindowClose, false);
     }
   }
 
@@ -141,9 +161,15 @@ class Typeahead extends Component {
     return null;
   }
 
-  makeDropdownVisible() {
+  showDropdown() {
     this.setState({
       isDropdownVisible: true,
+    });
+  }
+
+  hideDropdown() {
+    this.setState({
+      isDropdownVisible: false,
     });
   }
 
@@ -360,15 +386,28 @@ class Typeahead extends Component {
 
     this.setState({
       selectionIndex: newIndex,
+      entryValue: this.state.searchResults[newIndex],
     });
+
+    // const inputValue = this.state.entryValue;
+    // const options = this.state.searchResults;
+    // const selectedOption = options[this.state.selectionIndex];
   }
 
   navDown() {
-    this.nav(1);
+    if (this.state.isDropdownVisible) {
+      this.nav(1);
+    } else {
+      this.showDropdown();
+    }
   }
 
   navUp() {
-    this.nav(-1);
+    if (this.state.isDropdownVisible) {
+      this.nav(-1);
+    } else {
+      this.showDropdown();
+    }
   }
 
   onChange(event) {
@@ -399,10 +438,14 @@ class Typeahead extends Component {
     }
 
     // Don't propagate the keystroke back to the DOM/browser
-    // if (
-    //   event.keyCode !== KeyEvent.DOM_VK_BACKSPACE ||
-    //   event.keyCode !== KeyEvent.DOM_VK_TAB
-    // ) {
+    if (
+      event.keyCode !== KeyEvent.DOM_VK_BACKSPACE &&
+      event.keyCode !== KeyEvent.DOM_VK_TAB
+    ) {
+      event.preventDefault();
+    }
+
+    // if (this.state.isDropdownVisible) {
     //   event.preventDefault();
     // }
 
@@ -490,6 +533,14 @@ class Typeahead extends Component {
     return this.state.searchResults.length > 0 || this.hasCustomValue();
   }
 
+  handleWindowClose(event) {
+    const target = event.target;
+
+    if (target !== window && !this.typeahead.contains(target)) {
+      this.hideDropdown();
+    }
+  }
+
   renderAriaMessageForOptions() {
     const inputValue = this.state.entryValue;
     // const search = this.generateSearchFunction();
@@ -505,8 +556,6 @@ class Typeahead extends Component {
     return (
       <Status>
         {selectedOption || inputValue}
-        {/* {this.onTextEntryUpdated()} */}
-        {/* {this.state.selection} */}
       </Status>
     );
   }
@@ -518,12 +567,11 @@ class Typeahead extends Component {
     const options = this.state.searchResults || [];
     const numberOfSuggestions = options.length ? options.length : 0;
     const suggestionText = `${numberOfSuggestions} suggestion${options.length !== 1 ? "s are" : " is"} available.`;
-    const instructionText = options.length > 0 && " Use up and down arrows to select.";
+    const instructionText = options.length > 0 && "Use up and down arrows to select.";
 
     return (
       <Status>
-        {suggestionText}
-        {instructionText}
+        {`${suggestionText} ${instructionText}`}
       </Status>
     );
   }
@@ -561,7 +609,10 @@ class Typeahead extends Component {
     const InputElement = textarea ? "textarea" : "input";
 
     return (
-      <div className={classList}>
+      <div
+        className={classList}
+        ref={node => (this.typeahead = node)}
+      >
         {this.renderHiddenInput()}
 
         <InputElement
@@ -671,8 +722,8 @@ Typeahead.defaultProps = {
   disabled: false,
   textarea: false,
   // inputProps: {},
-  inputId: "typeahead-input",
-  inputName: "typeahead-input",
+  inputId: "typeaheadInput",
+  inputName: "typeaheadInput",
   autoFocus: false,
   required: false,
   onOptionSelected: () => {},

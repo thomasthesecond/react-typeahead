@@ -64,7 +64,7 @@ class TypeaheadOption extends Component {
           tabIndex={-1}
           onClick={this.onClick}
           className={this.getClasses()}
-          ref={node => (this.anchor = node)}
+          ref={node => (this.option = node)}
         >
           {children}
         </button>
