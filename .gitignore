@@ -5,3 +5,4 @@ node_modules
 .*.swn
 test/bundle.js
 npm-debug.log
+storybook-static
