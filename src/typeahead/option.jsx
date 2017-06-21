@@ -64,7 +64,7 @@ class TypeaheadOption extends Component {
         onClick={this.onClick}
         onMouseOver={this.onMouseOver}
         style={{
-          backgroundColor: hover ? "gray" : "white",
+          backgroundColor: hover ? "rgba(0,0,0,.2)" : "#fff",
         }}
       >
         {/* <button
