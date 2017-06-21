@@ -1,5 +1,6 @@
 import React, { PropTypes } from "react";
 import cn from "classnames";
+import defaultClassNames from "../classNames";
 
 /**
  * Encapsulates the rendering of an option that has been "selected" in a
@@ -14,7 +15,7 @@ const Token = ({
   onRemove,
 }) => (
   <div
-    className={cn(["typeahead-token", className])}
+    className={cn([defaultClassNames.token, className])}
   >
     {name &&
       <input
@@ -28,7 +29,7 @@ const Token = ({
 
     {onRemove &&
       <button
-        className={className || "typeahead-token-close"}
+        className={defaultClassNames.token}
         onClick={(event) => {
           onRemove(object);
           event.preventDefault();

@@ -1,6 +1,8 @@
 const classNames = {
   typeahead: "Typeahead",
   tokenizer: "Typeahead--tokenizer",
+  token: "Typeahead-token",
+  tokenDelete: "Typeahead-tokenDelete",
   input: "Typeahead-input",
   results: "Typeahead-dropdown",
   listItem: "Typeahead-option",

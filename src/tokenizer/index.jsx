@@ -3,6 +3,7 @@ import cn from "classnames";
 import Token from "./token";
 import Accessor from "../accessor";
 import KeyEvent from "../keyevent";
+import defaultClassNames from "../classNames";
 import Typeahead from "../typeahead";
 
 /**
@@ -79,8 +80,10 @@ class TypeaheadTokenizer extends Component {
   }
 
   handleBackspace(event) {
+    const { selected } = this.state;
+
     // No tokens
-    if (!this.state.selected.length) {
+    if (!selected.length) {
       return;
     }
 
@@ -92,36 +95,42 @@ class TypeaheadTokenizer extends Component {
       inputElement.selectionStart === inputElement.selectionEnd &&
       inputElement.selectionStart === 0
     ) {
-      this.removeTokenForValue(this.state.selected[this.state.selected.length - 1]);
+      this.removeTokenForValue(selected[selected.length - 1]);
       event.preventDefault();
     }
   }
 
   removeTokenForValue(value) {
-    const index = this.state.selected.indexOf(value);
+    const { selected } = this.state;
+
+    const index = selected.indexOf(value);
 
     if (index === -1) {
       return;
     }
 
-    this.state.selected.splice(index, 1);
+    // TODO: not sure we should be doing this to state
+    selected.splice(index, 1);
 
     this.setState({
-      selected: this.state.selected,
+      selected,
     });
 
     this.props.onTokenRemove(value);
   }
 
   addTokenForValue(event, value) {
-    if (this.state.selected.indexOf(value) !== -1) {
+    const { selected } = this.state;
+
+    if (selected.indexOf(value) !== -1) {
       return;
     }
 
-    this.state.selected.push(value);
+    // TODO: not sure we should be doing this to state
+    selected.push(value);
 
     this.setState({
-      selected: this.state.selected,
+      selected,
     });
 
     this.typeahead.setEntryText("");
@@ -130,20 +139,30 @@ class TypeaheadTokenizer extends Component {
 
   // TODO: Support initialized tokens
   renderTokens() {
-    const tokenClasses = {};
+    const {
+      customClasses,
+      disableDefaultClassNames,
+      displayOption,
+      formInputOption,
+      name,
+    } = this.props;
 
-    tokenClasses[this.props.customClasses.token] = !!this.props.customClasses.token;
+    const tokenClasses = {
+      [defaultClassNames.token]: !disableDefaultClassNames,
+    };
+
+    tokenClasses[customClasses.token] = !!customClasses.token;
 
     const classList = cn(tokenClasses);
 
     const result = this.state.selected.map((selected) => {
       const displayString = Accessor.valueForOption(
-        this.props.displayOption,
+        displayOption,
         selected,
       );
 
       const value = Accessor.valueForOption(
-        this.props.formInputOption || this.props.displayOption,
+        formInputOption || displayOption,
         selected,
       );
 
@@ -154,7 +173,7 @@ class TypeaheadTokenizer extends Component {
           onRemove={this.removeTokenForValue}
           object={selected}
           value={value}
-          name={this.props.name}
+          name={name}
         >
           {displayString}
         </Token>
@@ -168,7 +187,7 @@ class TypeaheadTokenizer extends Component {
     const classes = {};
     classes[this.props.customClasses.typeahead] = !!this.props.customClasses.typeahead;
     const classList = cn(classes);
-    const tokenizerClasses = [this.props.defaultClassNames && "typeahead-tokenizer"];
+    const tokenizerClasses = [!this.props.disableDefaultClassNames && defaultClassNames.tokenizer];
     tokenizerClasses[this.props.className] = !!this.props.className;
     const tokenizerClassList = cn(tokenizerClasses);
 
@@ -195,7 +214,7 @@ class TypeaheadTokenizer extends Component {
           onFocus={this.props.onFocus}
           onBlur={this.props.onBlur}
           displayOption={this.props.displayOption}
-          defaultClassNames={this.props.defaultClassNames}
+          disableDefaultClassNames={this.props.disableDefaultClassNames}
           filterOption={this.props.filterOption}
           searchOptions={this.props.searchOptions}
         />
@@ -237,7 +256,7 @@ TypeaheadTokenizer.propTypes = {
   ]),
   maxVisible: PropTypes.number,
   resultsTruncatedMessage: PropTypes.string,
-  defaultClassNames: PropTypes.bool,
+  disableDefaultClassNames: PropTypes.bool,
 };
 
 TypeaheadTokenizer.defaultProps = {
@@ -251,7 +270,7 @@ TypeaheadTokenizer.defaultProps = {
   placeholder: "",
   disabled: false,
   inputProps: {},
-  defaultClassNames: true,
+  disableDefaultClassNames: false,
   filterOption: null,
   searchOptions: null,
   displayOption: (token) => token,
