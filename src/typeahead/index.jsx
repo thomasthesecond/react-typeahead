@@ -236,9 +236,9 @@ class Typeahead extends Component {
       resultsTruncatedMessage: message,
     } = this.props;
 
-    return areResultsTruncated && (
+    return areResultsTruncated ? (
       message || `There are ${countTruncatedResults} more results.`
-    );
+    ) : "";
   }
 
   renderIncrementalSearchResults() {

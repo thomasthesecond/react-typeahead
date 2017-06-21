@@ -23,7 +23,7 @@ import Tokenizer from "../lib/tokenizer";
 const localProps = {
   // disableDefaultClassNames: true,
   // customClasses: classNames,
-  maxVisible: 5,
+  // maxVisible: 5,
 };
 
 storiesOf("Typeahead", module)
