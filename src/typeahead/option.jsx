@@ -1,15 +1,17 @@
 import React, { Component, PropTypes } from "react";
 import cn from "classnames";
+import defaultClassNames from "../classNames";
+import createClassList from "../createClassList";
 
 /**
  * A single option within the TypeaheadSelector
  */
 class TypeaheadOption extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
-    this.getClasses = this.getClasses.bind(this);
     this.onClick = this.onClick.bind(this);
+    this.onMouseOver = this.onMouseOver.bind(this);
   }
 
   onClick(event) {
@@ -18,37 +20,40 @@ class TypeaheadOption extends Component {
     return this.props.onClick(event);
   }
 
-  getClasses() {
-    const { customClasses } = this.props;
+  onMouseOver(event) {
+    event.preventDefault();
 
-    const classes = {
-      "typeahead-option": true,
-    };
-
-    classes[customClasses.listAnchor] = !!customClasses.listAnchor;
-
-    return cn(classes);
+    return this.props.onMouseOver(event);
   }
 
   render() {
-    const classes = {};
-
     const {
       customClasses,
+      disableDefaultClassNames,
       customValue,
       children,
       hover,
       activeDescendantId,
     } = this.props;
 
-    classes[customClasses.hover || "hover"] = !!hover;
+    const classes = {
+      [defaultClassNames.listItem]: !disableDefaultClassNames,
+    };
+
+    classes[customClasses.hover || defaultClassNames.hover] = !!hover;
     classes[customClasses.listItem] = !!customClasses.listItem;
 
     if (customValue) {
-      classes[customClasses.customAdd] = !!customClasses.customAdd;
+      classes[customClasses.customAdd || defaultClassNames.customAdd] = !!customClasses.customAdd;
     }
 
     const classList = cn(classes);
+
+    const optionClassList = createClassList(
+      customClasses.listAnchor,
+      "listAnchor",
+      disableDefaultClassNames,
+    );
 
     return (
       <li
@@ -56,18 +61,29 @@ class TypeaheadOption extends Component {
         className={classList}
         role="option"
         aria-selected={hover}
+        onClick={this.onClick}
+        onMouseOver={this.onMouseOver}
         style={{
           backgroundColor: hover ? "gray" : "white",
         }}
       >
-        <button
+        {/* <button
           tabIndex={-1}
           onClick={this.onClick}
-          className={this.getClasses()}
+          className={optionClassList}
           ref={node => (this.option = node)}
         >
           {children}
-        </button>
+        </button> */}
+        <div
+          className={optionClassList}
+          ref={node => (this.option = node)}
+          style={{
+            cursor: "default",
+          }}
+        >
+          {children}
+        </div>
       </li>
     );
   }
@@ -82,9 +98,11 @@ TypeaheadOption.propTypes = {
   }),
   customValue: PropTypes.string,
   onClick: PropTypes.func,
+  onMouseOver: PropTypes.func,
   children: PropTypes.string,
   hover: PropTypes.bool,
   activeDescendantId: PropTypes.string,
+  disableDefaultClassNames: PropTypes.bool,
 };
 
 TypeaheadOption.defaultProps = {
@@ -93,9 +111,13 @@ TypeaheadOption.defaultProps = {
   onClick: (event) => {
     event.preventDefault();
   },
+  onMouseOver: (event) => {
+    event.preventDefault();
+  },
   children: null,
   hover: false,
   activeDescendantId: "",
+  disableDefaultClassNames: false,
 };
 
 export default TypeaheadOption;

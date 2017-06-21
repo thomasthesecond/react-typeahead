@@ -5,16 +5,20 @@ const Status = ({ children }) => (
     role="status"
     aria-live="polite"
     style={{
-      // left: "-9999px",
-      // position: "absolute",
+      left: "-9999px",
+      position: "absolute",
     }}
   >
-    <b>{children}</b>
+    {children}
   </span>
 );
 
 Status.propTypes = {
-  children: PropTypes.string.isRequired,
+  children: PropTypes.string,
+};
+
+Status.defaultProps = {
+  children: null,
 };
 
 export default Status;

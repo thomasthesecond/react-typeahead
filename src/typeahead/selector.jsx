@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from "react";
-import cn from "classnames";
 import TypeaheadOption from "./option";
+import createClassList from "../createClassList";
 
 /**
  * Container for the options rendered as part of the autocompletion process
@@ -11,6 +11,7 @@ class TypeaheadSelector extends Component {
     super(props);
 
     this.onClick = this.onClick.bind(this);
+    this.onMouseOver = this.onMouseOver.bind(this);
   }
 
   // componentWillReceiveProps(nextProps) {
@@ -28,11 +29,15 @@ class TypeaheadSelector extends Component {
     return this.props.onOptionSelected(event, result);
   }
 
+  onMouseOver(event, index) {
+    return this.props.onMouseOver(event, index);
+  }
+
   render() {
     const {
       options,
       allowCustomValues,
-      defaultClassNames,
+      disableDefaultClassNames,
       customClasses,
       areResultsTruncated,
       resultsTruncatedMessage,
@@ -48,13 +53,11 @@ class TypeaheadSelector extends Component {
       return false;
     }
 
-    const classes = {
-      "typeahead-selector": defaultClassNames,
-    };
-
-    classes[customClasses.results] = customClasses.results;
-
-    const classList = cn(classes);
+    const dropdownClassList = createClassList(
+      customClasses.results,
+      "results",
+      disableDefaultClassNames,
+    );
 
     // CustomValue should be added to top of
     // results list with different class name
@@ -71,7 +74,9 @@ class TypeaheadSelector extends Component {
           customClasses={customClasses}
           customValue={this.props.customValue}
           onClick={(event) => { this.onClick(event, this.props.customValue); }}
+          onMouseOver={(event) => { this.onMouseOver(event, 0); }}
           activeDescendantId={activeDescendantId}
+          disableDefaultClassNames={disableDefaultClassNames}
         >
           {this.props.customValue}
         </TypeaheadOption>
@@ -80,30 +85,28 @@ class TypeaheadSelector extends Component {
 
     const results = options.map((result, index) => {
       const displayString = displayOption(result, index);
-      const uniqueKey = `${displayString}_${index}`;
 
       return (
         <TypeaheadOption
-          ref={uniqueKey}
-          key={uniqueKey}
+          key={displayString}
           hover={selectionIndex === (index + customValueOffset)}
           customClasses={customClasses}
           onClick={(event) => { this.onClick(event, result); }}
+          onMouseOver={(event) => { this.onMouseOver(event, index); }}
           activeDescendantId={activeDescendantId}
+          disableDefaultClassNames={disableDefaultClassNames}
         >
           {displayString}
         </TypeaheadOption>
       );
-    }, this);
+    });
 
-    if (areResultsTruncated && resultsTruncatedMessage !== null) {
-      const resultsTruncatedClasses = {
-        "results-truncated": defaultClassNames,
-      };
-
-      resultsTruncatedClasses[customClasses.resultsTruncated] = customClasses.resultsTruncated;
-
-      const resultsTruncatedClassList = cn(resultsTruncatedClasses);
+    if (areResultsTruncated && resultsTruncatedMessage) {
+      const resultsTruncatedClassList = createClassList(
+        customClasses.resultsTruncated,
+        "resultsTruncated",
+        disableDefaultClassNames,
+      );
 
       results.push(
         <li
@@ -118,7 +121,7 @@ class TypeaheadSelector extends Component {
     return (
       <ul
         id={id}
-        className={classList}
+        className={dropdownClassList}
         role="listbox"
         aria-hidden={!isVisible}
         style={{
@@ -143,7 +146,8 @@ TypeaheadSelector.propTypes = {
   customValue: PropTypes.string,
   selectionIndex: PropTypes.number,
   onOptionSelected: PropTypes.func,
-  defaultClassNames: PropTypes.bool,
+  onMouseOver: PropTypes.func,
+  disableDefaultClassNames: PropTypes.bool,
   areResultsTruncated: PropTypes.bool,
   resultsTruncatedMessage: PropTypes.string,
   id: PropTypes.string,
@@ -158,7 +162,8 @@ TypeaheadSelector.defaultProps = {
   customValue: null,
   selectionIndex: null,
   onOptionSelected: () => {},
-  defaultClassNames: true,
+  onMouseOver: () => {},
+  disableDefaultClassNames: false,
   areResultsTruncated: false,
   resultsTruncatedMessage: null,
   id: "",

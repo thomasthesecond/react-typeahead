@@ -1,6 +1,7 @@
 import React from "react";
 import { storiesOf } from "@storybook/react";
 import { withKnobs } from "@storybook/addon-knobs";
+import data from "./data.json";
 // import { Typeahead, Tokenizer } from "../lib/react-typeahead";
 // import Tokenizer from "../lib/react-typeahead";
 import Typeahead from "../lib/typeahead";
@@ -9,19 +10,20 @@ import Tokenizer from "../lib/tokenizer";
 // console.log(Typeahead);
 // console.log(Tokenizer);
 
-const classNames = {
-  typeahead: "Typeahead--tokenizer",
-  input: "Typeahead-input",
-  results: "Typeahead-results",
-  listItem: "Typeahead-listItem",
-  listAnchor: "Typeahead-listAnchor",
-  hover: "Typeahead-hover",
-  resultsTruncated: "Typeahead-resultsTruncated",
-};
+// const classNames = {
+//   typeahead: "Typeahead--tokenizer",
+//   input: "Typeahead-input",
+//   results: "Typeahead-results",
+//   listItem: "Typeahead-listItem",
+//   listAnchor: "Typeahead-listAnchor",
+//   hover: "Typeahead-hover",
+//   resultsTruncated: "Typeahead-resultsTruncated",
+// };
 
 const localProps = {
-  defaultClassNames: false,
-  customClasses: classNames,
+  // disableDefaultClassNames: true,
+  // customClasses: classNames,
+  maxVisible: 5,
 };
 
 storiesOf("Typeahead", module)
@@ -29,20 +31,8 @@ storiesOf("Typeahead", module)
   .add("Default", () => (
     <Typeahead
       {...localProps}
-      className="Typeahead"
       placeholder="Select a location"
-      options={[
-        "Africa",
-        "Antarctica",
-        "Asia",
-        "Australia & Pacific",
-        "Caribbean",
-        "Central America",
-        "Europe",
-        "Middle East",
-        "North America",
-        "South America",
-      ]}
+      options={data.places}
     />
   ));
 
@@ -52,17 +42,6 @@ storiesOf("Tokenizer", module)
     <Tokenizer
       {...localProps}
       placeholder="Select a location"
-      options={[
-        "Africa",
-        "Antarctica",
-        "Asia",
-        "Australia & Pacific",
-        "Caribbean",
-        "Central America",
-        "Europe",
-        "Middle East",
-        "North America",
-        "South America",
-      ]}
+      options={data.places}
     />
   ));

@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from "react";
-import cn from "classnames";
 import fuzzy from "fuzzy";
 import TypeaheadSelector from "./selector";
 import Status from "./status";
+import createClassList from "../createClassList";
 import Accessor from "../accessor";
 import KeyEvent from "../keyevent";
 
@@ -10,7 +10,7 @@ import KeyEvent from "../keyevent";
  * A "typeahead", an auto-completing text input
  *
  * Renders an text input that shows options nearby that you can use the
- * keyboard or mouse to select.  Requires CSS for MASSIVE DAMAGE.
+ * keyboard or mouse to select. Requires CSS for MASSIVE DAMAGE.
  */
 class Typeahead extends Component {
   static getInstanceCount() {
@@ -30,6 +30,8 @@ class Typeahead extends Component {
       // This should be called something else, "entryValue"
       entryValue: props.value || props.initialValue,
 
+      // selectedValue: null,
+
       // A valid typeahead value
       selection: props.value,
 
@@ -47,6 +49,10 @@ class Typeahead extends Component {
       isDropdownVisible: false,
     };
 
+    this.previousInputValue = null;
+
+    this.onMouseOver = this.onMouseOver.bind(this);
+    this.onMouseOut = this.onMouseOut.bind(this);
     this.getOptionsForValue = this.getOptionsForValue.bind(this);
     this.setEntryText = this.setEntryText.bind(this);
     this.hasCustomValue = this.hasCustomValue.bind(this);
@@ -54,6 +60,9 @@ class Typeahead extends Component {
     this.showDropdown = this.showDropdown.bind(this);
     this.hideDropdown = this.hideDropdown.bind(this);
     this.renderIncrementalSearchResults = this.renderIncrementalSearchResults.bind(this);
+    this.countTruncatedResults = this.countTruncatedResults.bind(this);
+    this.areResultsTruncated = this.areResultsTruncated.bind(this);
+    this.resultsTruncatedMessage = this.resultsTruncatedMessage.bind(this);
     this.focus = this.focus.bind(this);
     this.getSelection = this.getSelection.bind(this);
     this.shouldSkipSearch = this.shouldSkipSearch.bind(this);
@@ -64,6 +73,7 @@ class Typeahead extends Component {
     this.onBackspace = this.onBackspace.bind(this);
     this.onTab = this.onTab.bind(this);
     this.eventMap = this.eventMap.bind(this);
+    this.setSelectedIndex = this.setSelectedIndex.bind(this);
     this.nav = this.nav.bind(this);
     this.navDown = this.navDown.bind(this);
     this.navUp = this.navUp.bind(this);
@@ -121,6 +131,18 @@ class Typeahead extends Component {
       window.removeEventListener("focus", this.handleWindowClose, true);
       window.removeEventListener("click", this.handleWindowClose, false);
     }
+  }
+
+  onMouseOver(event, index) {
+    this.setState({
+      selectionIndex: index,
+    });
+  }
+
+  onMouseOut() {
+    this.setState({
+      selectionIndex: null,
+    });
   }
 
   getOptionsForValue(value, options) {
@@ -192,6 +214,33 @@ class Typeahead extends Component {
     return false;
   }
 
+  countTruncatedResults() {
+    const { maxVisible } = this.props;
+    const { searchResults } = this.state;
+
+    return parseInt(searchResults.length, 10) - parseInt(maxVisible, 10);
+  }
+
+  areResultsTruncated() {
+    const { maxVisible } = this.props;
+    const { searchResults } = this.state;
+
+    return !!maxVisible && (searchResults.length > maxVisible);
+  }
+
+  resultsTruncatedMessage() {
+    const areResultsTruncated = this.areResultsTruncated();
+    const countTruncatedResults = this.countTruncatedResults();
+
+    const {
+      resultsTruncatedMessage: message,
+    } = this.props;
+
+    return areResultsTruncated && (
+      message || `There are ${countTruncatedResults} more results.`
+    );
+  }
+
   renderIncrementalSearchResults() {
     // Nothing has been entered into the textbox
     if (this.shouldSkipSearch(this.state.entryValue)) {
@@ -213,17 +262,16 @@ class Typeahead extends Component {
           this.state.searchResults.slice(0, this.props.maxVisible) :
           this.state.searchResults
         }
-        areResultsTruncated={!!this.props.maxVisible &&
-          (this.state.searchResults.length > this.props.maxVisible)
-        }
-        resultsTruncatedMessage={this.props.resultsTruncatedMessage}
+        areResultsTruncated={this.areResultsTruncated()}
+        resultsTruncatedMessage={this.resultsTruncatedMessage()}
         onOptionSelected={this.onOptionSelected}
         allowCustomValues={this.props.allowCustomValues}
         customValue={this.getCustomValue()}
         customClasses={this.props.customClasses}
         selectionIndex={this.state.selectionIndex}
-        defaultClassNames={this.props.defaultClassNames}
+        disableDefaultClassNames={this.props.disableDefaultClassNames}
         displayOption={Accessor.generateOptionToStringFor(this.props.displayOption)}
+        onMouseOver={this.onMouseOver}
       />
     );
   }
@@ -253,15 +301,19 @@ class Typeahead extends Component {
 
     this.inputElement.value = optionString;
 
+    const results = this.getOptionsForValue(optionString, this.props.options);
+
     this.setState({
-      searchResults: this.getOptionsForValue(optionString, this.props.options),
+      searchResults: results,
       selection: formInputOptionString,
+      selectionIndex: results.indexOf(optionString),
       entryValue: optionString,
       showResults: false,
       // isDropdownVisible: false,
     });
 
     // this.onBlur();
+    // if (this.props.blurOnOptionSelected) {}
     this.inputElement.blur();
 
     // console.log("onOptionSelected");
@@ -355,12 +407,21 @@ class Typeahead extends Component {
     return events;
   }
 
+  setSelectedIndex(index, callback) {
+    this.setState({
+      selectionIndex: index,
+    }, callback);
+  }
+
   nav(delta) {
+    // console.log(delta, this.state.selectionIndex);
+
     if (!this.hasHint()) {
       return;
     }
 
     const setIndex = delta === 1 ? 0 : delta;
+    // const previousInputValue = this.previousInputValue;
 
     let newIndex = this.state.selectionIndex === null ?
       setIndex :
@@ -370,22 +431,40 @@ class Typeahead extends Component {
       this.state.searchResults.slice(0, this.props.maxVisible).length :
       this.state.searchResults.length;
 
+    // const setIndex = delta === 1 ? 0 : (length - 1);
+
+    // let newIndex = this.state.selectionIndex === null ?
+    //   setIndex :
+    //   this.state.selectionIndex + delta;
+
     if (this.hasCustomValue()) {
       length += 1;
     }
 
+    // let newValue = this.state.searchResults[newIndex];
+
+    // if (previousInputValue === null) {
+    //   this.previousInputValue = this.state.entryValue;
+    // }
+
     if (newIndex < 0) {
-      // console.log("less than 0");
       newIndex += length;
+
+      // // newIndex += (length + 1);
+      // newIndex = length;
+      // newValue = previousInputValue;
     } else if (newIndex >= length) {
-      // console.log("greater than or eq to length");
       newIndex -= length;
+
+      // // newIndex -= (length + 1);
+      // newIndex = -1;
+      // newValue = previousInputValue;
     }
 
-    // console.log(newIndex);
-
+    // this.setSelectedIndex(newIndex);
     this.setState({
       selectionIndex: newIndex,
+      // entryValue: newValue,
       entryValue: this.state.searchResults[newIndex],
     });
 
@@ -561,13 +640,17 @@ class Typeahead extends Component {
   }
 
   renderAriaMessageForIncomingOptions() {
+    const { maxVisible } = this.props;
+    const { searchResults } = this.state;
     // const inputValue = this.state.entryValue;
     // const search = this.generateSearchFunction();
     // const options = search(inputValue, this.props.options) || [];
-    const options = this.state.searchResults || [];
-    const numberOfSuggestions = options.length ? options.length : 0;
-    const suggestionText = `${numberOfSuggestions} suggestion${options.length !== 1 ? "s are" : " is"} available.`;
-    const instructionText = options.length > 0 && "Use up and down arrows to select.";
+    const options = searchResults || [];
+    const totalOptions = options.length ? options.length : 0;
+    const numberOfSuggestions = maxVisible && (maxVisible < options.length) ?
+      maxVisible : totalOptions;
+    const suggestionText = `${numberOfSuggestions} suggestion${numberOfSuggestions !== 1 ? "s are" : " is"} available.`;
+    const instructionText = numberOfSuggestions > 0 ? "Use up and down arrows to select." : "";
 
     return (
       <Status>
@@ -577,12 +660,10 @@ class Typeahead extends Component {
   }
 
   render() {
-    const inputClasses = {};
-
     const {
-      customClasses,
-      defaultClassNames,
       className,
+      customClasses,
+      disableDefaultClassNames,
       textarea,
       disabled,
       placeholder,
@@ -594,29 +675,31 @@ class Typeahead extends Component {
       inputName,
     } = this.props;
 
-    inputClasses[customClasses.input] = !!customClasses.input;
-
-    const inputClassList = cn(inputClasses);
-
-    const classes = {
-      typeahead: defaultClassNames,
-    };
-
-    classes[className] = !!className;
-
-    const classList = cn(classes);
-
     const InputElement = textarea ? "textarea" : "input";
+
+    const containerClassList = createClassList(
+      className,
+      "typeahead",
+      disableDefaultClassNames,
+    );
+
+    const inputClassList = createClassList(
+      customClasses.input,
+      "input",
+      disableDefaultClassNames,
+    );
 
     return (
       <div
-        className={classList}
+        className={containerClassList}
         ref={node => (this.typeahead = node)}
+        onMouseOut={this.onMouseOut}
       >
         {this.renderHiddenInput()}
 
         <InputElement
           ref={node => (this.inputElement = node)}
+          className={inputClassList}
           type="text"
           role="combobox"
           aria-owns={this.optionsId}
@@ -634,7 +717,6 @@ class Typeahead extends Component {
           name={inputName}
           disabled={disabled}
           placeholder={placeholder}
-          className={inputClassList}
           value={this.state.entryValue}
           onChange={this.onChange}
           onKeyDown={this.onKeyDown}
@@ -663,7 +745,7 @@ Typeahead.propTypes = {
     listItem: PropTypes.string,
     results: PropTypes.string,
     resultsTruncated: PropTypes.string,
-    typeahead: PropTypes.string,
+    customAdd: PropTypes.string,
   }),
   maxVisible: PropTypes.number,
   resultsTruncatedMessage: PropTypes.string,
@@ -703,7 +785,7 @@ Typeahead.propTypes = {
     PropTypes.string,
     PropTypes.func,
   ]),
-  defaultClassNames: PropTypes.bool,
+  disableDefaultClassNames: PropTypes.bool,
   customListComponent: PropTypes.oneOfType([
     PropTypes.element,
     PropTypes.func,
@@ -736,7 +818,7 @@ Typeahead.defaultProps = {
   filterOption: null,
   searchOptions: null,
   inputDisplayOption: null,
-  defaultClassNames: true,
+  disableDefaultClassNames: false,
   customListComponent: TypeaheadSelector,
   showOptionsWhenEmpty: false,
   maxVisible: 0,
