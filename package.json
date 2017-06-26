@@ -46,7 +46,7 @@
   "peerDependencies": {
     "react": "^15.0.0"
   },
-  "main": "lib/react-typeahead.js",
+  "main": "dist/index.js",
   "devDependencies": {
     "babel-cli": "^6.14.0",
     "babel-eslint": "^6.1.2",
@@ -65,8 +65,8 @@
   },
   "scripts": {
     "test": "NODE_ENV=test mocha --reporter spec --compilers js:babel-register --recursive spec/",
-    "build": "rm -rf lib && babel -d lib src",
-    "ci": "rm -rf lib && babel --watch -d lib src",
+    "build": "rm -rf dist && babel -d dist src",
+    "ci": "rm -rf dist && babel --watch -d dist src",
     "test:ci": "NODE_ENV=test mocha --reporter spec --compilers js:babel-register --watch --recursive spec/",
     "lint": "./node_modules/.bin/eslint src --ext .js,.jsx",
     "storybook": "start-storybook -p 6006",
