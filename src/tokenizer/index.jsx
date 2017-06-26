@@ -168,7 +168,7 @@ class TypeaheadTokenizer extends Component {
 
       return (
         <Token
-          className={classList}
+          // className={classList}
           key={displayString}
           onRemove={this.removeTokenForValue}
           object={selected}
