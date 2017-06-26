@@ -63,9 +63,6 @@ class TypeaheadOption extends Component {
         aria-selected={hover}
         onClick={this.onClick}
         onMouseOver={this.onMouseOver}
-        style={{
-          backgroundColor: hover ? "rgba(0,0,0,.2)" : "#fff",
-        }}
       >
         {/* <button
           tabIndex={-1}

@@ -97,10 +97,7 @@ var TypeaheadOption = function (_Component) {
           role: "option",
           "aria-selected": hover,
           onClick: this.onClick,
-          onMouseOver: this.onMouseOver,
-          style: {
-            backgroundColor: hover ? "rgba(0,0,0,.2)" : "#fff"
-          }
+          onMouseOver: this.onMouseOver
         },
         _react2.default.createElement(
           "div",
