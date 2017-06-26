@@ -694,6 +694,7 @@ class Typeahead extends Component {
         className={containerClassList}
         ref={node => (this.typeahead = node)}
         onMouseOut={this.onMouseOut}
+        style={this.props.style}
       >
         {this.renderHiddenInput()}
 
@@ -791,6 +792,13 @@ Typeahead.propTypes = {
     PropTypes.func,
   ]),
   showOptionsWhenEmpty: PropTypes.bool,
+  style: PropTypes.objectOf(
+    PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+      PropTypes.object,
+    ]),
+  ),
 };
 
 Typeahead.defaultProps = {
@@ -826,6 +834,7 @@ Typeahead.defaultProps = {
   formInputOption: null,
   name: null,
   resultsTruncatedMessage: null,
+  style: null,
 };
 
 export default Typeahead;
