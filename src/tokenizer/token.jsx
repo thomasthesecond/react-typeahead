@@ -29,7 +29,7 @@ const Token = ({
 
     {onRemove &&
       <button
-        className={defaultClassNames.token}
+        className={`${defaultClassNames.tokenDelete}`}
         onClick={(event) => {
           onRemove(object);
           event.preventDefault();
