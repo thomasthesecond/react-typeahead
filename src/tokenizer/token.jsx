@@ -35,7 +35,20 @@ const Token = ({
           event.preventDefault();
         }}
       >
-        &#x00d7;
+        <svg
+          viewBox="0 0 32 32"
+          title={`Remove ${children} selection`}
+          style={{
+            display: "inline-block",
+            fill: "currentColor",
+            height: "1em",
+            lineHeight: 1,
+            verticalAlign: "middle",
+            width: "1em",
+          }}
+        >
+          <path d="M18 16l10-10-2-2-10 10-10-10-2 2 10 10-10 10 2 2 10-10 10 10 2-2-10-10z" />
+        </svg>
       </button>
     }
   </div>
