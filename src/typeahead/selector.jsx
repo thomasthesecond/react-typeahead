@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from "react";
+import styled from "styled-components";
 import TypeaheadOption from "./option";
 import createClassList from "../createClassList";
 
@@ -68,7 +69,7 @@ class TypeaheadSelector extends Component {
       customValueOffset++;
       customValue = (
         <TypeaheadOption
-          ref={this.props.customValue}
+          innerRef={node => (this.customOption = node)}
           key={this.props.customValue}
           hover={selectionIndex === 0}
           customClasses={customClasses}
@@ -92,7 +93,7 @@ class TypeaheadSelector extends Component {
           hover={selectionIndex === (index + customValueOffset)}
           customClasses={customClasses}
           onClick={(event) => { this.onClick(event, result); }}
-          onMouseOver={(event) => { this.onMouseOver(event, index); }}
+          // onMouseOver={(event) => { this.onMouseOver(event, index); }}
           activeDescendantId={activeDescendantId}
           disableDefaultClassNames={disableDefaultClassNames}
         >
@@ -118,8 +119,21 @@ class TypeaheadSelector extends Component {
       );
     }
 
+    const List = styled.ul`
+      box-shadow: 0 5px 10px 1px rgba(153,169,179, .5);
+      left: 0;
+      list-style: none;
+      margin-bottom: 0;
+      margin-top: 0;
+      overflow: hidden;
+      padding-left: 0;
+      position: absolute;
+      top: auto;
+      width: 100%;
+    `;
+
     return (
-      <ul
+      <List
         id={id}
         className={dropdownClassList}
         role="listbox"
@@ -130,7 +144,7 @@ class TypeaheadSelector extends Component {
       >
         {customValue}
         {results}
-      </ul>
+      </List>
     );
   }
 }
@@ -146,7 +160,7 @@ TypeaheadSelector.propTypes = {
   customValue: PropTypes.string,
   selectionIndex: PropTypes.number,
   onOptionSelected: PropTypes.func,
-  onMouseOver: PropTypes.func,
+  // onMouseOver: PropTypes.func,
   disableDefaultClassNames: PropTypes.bool,
   areResultsTruncated: PropTypes.bool,
   resultsTruncatedMessage: PropTypes.string,

@@ -1,5 +1,9 @@
 import React, { Component, PropTypes } from "react";
+// import styled from "styled-components";
 import fuzzy from "fuzzy";
+import Container from "./container";
+import Input from "./input";
+// import Textarea from "./textarea";
 import TypeaheadSelector from "./selector";
 import Status from "./status";
 import createClassList from "../createClassList";
@@ -51,7 +55,7 @@ class Typeahead extends Component {
 
     this.previousInputValue = null;
 
-    this.onMouseOver = this.onMouseOver.bind(this);
+    // this.onMouseOver = this.onMouseOver.bind(this);
     this.onMouseOut = this.onMouseOut.bind(this);
     this.getOptionsForValue = this.getOptionsForValue.bind(this);
     this.setEntryText = this.setEntryText.bind(this);
@@ -133,11 +137,11 @@ class Typeahead extends Component {
     }
   }
 
-  onMouseOver(event, index) {
-    this.setState({
-      selectionIndex: index,
-    });
-  }
+  // onMouseOver(event, index) {
+  //   this.setState({
+  //     selectionIndex: index,
+  //   });
+  // }
 
   onMouseOut() {
     this.setState({
@@ -254,7 +258,7 @@ class Typeahead extends Component {
 
     return (
       <this.props.customListComponent
-        ref={node => (this.dropdown = node)}
+        innerRef={node => (this.dropdown = node)}
         id={this.optionsId}
         isVisible={this.state.isDropdownVisible}
         activeDescendantId={this.activeDescendantId}
@@ -271,7 +275,7 @@ class Typeahead extends Component {
         selectionIndex={this.state.selectionIndex}
         disableDefaultClassNames={this.props.disableDefaultClassNames}
         displayOption={Accessor.generateOptionToStringFor(this.props.displayOption)}
-        onMouseOver={this.onMouseOver}
+        // onMouseOver={this.onMouseOver}
       />
     );
   }
@@ -314,7 +318,7 @@ class Typeahead extends Component {
 
     // this.onBlur();
     // if (this.props.blurOnOptionSelected) {}
-    this.inputElement.blur();
+    // this.inputElement.blur();
 
     // console.log("onOptionSelected");
     return this.props.onOptionSelected(event, option);
@@ -664,7 +668,7 @@ class Typeahead extends Component {
       className,
       customClasses,
       disableDefaultClassNames,
-      textarea,
+      // textarea,
       disabled,
       placeholder,
       onKeyPress,
@@ -674,8 +678,6 @@ class Typeahead extends Component {
       inputId,
       inputName,
     } = this.props;
-
-    const InputElement = textarea ? "textarea" : "input";
 
     const containerClassList = createClassList(
       className,
@@ -690,15 +692,15 @@ class Typeahead extends Component {
     );
 
     return (
-      <div
+      <Container
         className={containerClassList}
-        ref={node => (this.typeahead = node)}
+        innerRef={node => (this.typeahead = node)}
         onMouseOut={this.onMouseOut}
       >
         {this.renderHiddenInput()}
 
-        <InputElement
-          ref={node => (this.inputElement = node)}
+        <Input
+          innerRef={node => (this.inputElement = node)}
           className={inputClassList}
           type="text"
           role="combobox"
@@ -730,7 +732,7 @@ class Typeahead extends Component {
 
         {this.renderAriaMessageForOptions()}
         {this.renderAriaMessageForIncomingOptions()}
-      </div>
+      </Container>
     );
   }
 }
@@ -755,7 +757,7 @@ Typeahead.propTypes = {
   value: PropTypes.string,
   placeholder: PropTypes.string,
   disabled: PropTypes.bool,
-  textarea: PropTypes.bool,
+  // textarea: PropTypes.bool,
   // inputProps: PropTypes.object,
   inputId: PropTypes.string,
   inputName: PropTypes.string,
@@ -802,7 +804,7 @@ Typeahead.defaultProps = {
   value: "",
   placeholder: "",
   disabled: false,
-  textarea: false,
+  // textarea: false,
   // inputProps: {},
   inputId: "typeaheadInput",
   inputName: "typeaheadInput",

@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from "react";
+import styled from "styled-components";
 import cn from "classnames";
 import defaultClassNames from "../classNames";
 import createClassList from "../createClassList";
@@ -11,7 +12,7 @@ class TypeaheadOption extends Component {
     super(props);
 
     this.onClick = this.onClick.bind(this);
-    this.onMouseOver = this.onMouseOver.bind(this);
+    // this.onMouseOver = this.onMouseOver.bind(this);
   }
 
   onClick(event) {
@@ -20,11 +21,11 @@ class TypeaheadOption extends Component {
     return this.props.onClick(event);
   }
 
-  onMouseOver(event) {
-    event.preventDefault();
-
-    return this.props.onMouseOver(event);
-  }
+  // onMouseOver(event) {
+  //   event.preventDefault();
+  //
+  //   return this.props.onMouseOver(event);
+  // }
 
   render() {
     const {
@@ -55,17 +56,32 @@ class TypeaheadOption extends Component {
       disableDefaultClassNames,
     );
 
+    // padding: 12px 24px 10px;
+    const Item = styled.li`
+      font-weight: 300;
+      padding: 12px 4px;
+      white-space: nowrap;
+
+      &.${defaultClassNames.hover} {
+        background-color: #f4fbfe;
+      }
+    `;
+
+    const ItemValue = styled.div`
+      cursor: default;
+    `;
+
     return (
-      <li
+      <Item
         id={hover ? activeDescendantId : null}
         className={classList}
         role="option"
         aria-selected={hover}
         onClick={this.onClick}
-        onMouseOver={this.onMouseOver}
-        style={{
-          backgroundColor: hover ? "rgba(0,0,0,.2)" : "#fff",
-        }}
+        // onMouseOver={this.onMouseOver}
+        // style={{
+        //   backgroundColor: hover ? "rgba(0,0,0,.2)" : "#fff",
+        // }}
       >
         {/* <button
           tabIndex={-1}
@@ -75,16 +91,16 @@ class TypeaheadOption extends Component {
         >
           {children}
         </button> */}
-        <div
+        <ItemValue
           className={optionClassList}
-          ref={node => (this.option = node)}
-          style={{
-            cursor: "default",
-          }}
+          innerRef={node => (this.option = node)}
+          // style={{
+          //   cursor: "default",
+          // }}
         >
           {children}
-        </div>
-      </li>
+        </ItemValue>
+      </Item>
     );
   }
 }
@@ -98,7 +114,7 @@ TypeaheadOption.propTypes = {
   }),
   customValue: PropTypes.string,
   onClick: PropTypes.func,
-  onMouseOver: PropTypes.func,
+  // onMouseOver: PropTypes.func,
   children: PropTypes.string,
   hover: PropTypes.bool,
   activeDescendantId: PropTypes.string,
@@ -111,9 +127,9 @@ TypeaheadOption.defaultProps = {
   onClick: (event) => {
     event.preventDefault();
   },
-  onMouseOver: (event) => {
-    event.preventDefault();
-  },
+  // onMouseOver: (event) => {
+  //   event.preventDefault();
+  // },
   children: null,
   hover: false,
   activeDescendantId: "",

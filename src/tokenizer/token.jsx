@@ -1,6 +1,66 @@
-import React, { PropTypes } from "react";
-import cn from "classnames";
+import React, { PropTypes } from "react"; // eslint-disable-line no-unused-vars
+import styled from "styled-components";
+// import cn from "classnames";
 import defaultClassNames from "../classNames";
+
+const Container = styled.div`
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #e4e4e4;
+  border-radius: 32px;
+  display: inline-flex;
+  color: #2c3643;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  height: 32px;
+  justify-content: center;
+  line-height: 1;
+  padding-left: 24px;
+  padding-right: 24px;
+  position: relative;
+
+  &:not(:first-of-type) {
+    margin-left: 8px;
+  }
+`;
+
+const Button = styled.button`
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 8px;
+  line-height: 1;
+  /*margin-left: 8px;*/
+  margin-right: -8px;
+  padding: 8px;
+  transition: color 200ms ease-in-out;
+
+  &:hover,
+  &:active,
+  &:focus {
+    color: rgba(44,54,67, .7);
+  }
+
+  &:focus {
+    outline: 0;
+  }
+`;
+
+const Icon = styled.svg`
+  display: inline-block;
+  fill: currentColor;
+  height: 1em;
+  line-height: 1;
+  vertical-align: middle;
+  width: 1em;
+
+  button:focus > & {
+    outline: 1px dotted lightgray;
+    outline-offset: 2px;
+  }
+`;
 
 /**
  * Encapsulates the rendering of an option that has been "selected" in a
@@ -14,8 +74,9 @@ const Token = ({
   object,
   onRemove,
 }) => (
-  <div
-    className={cn([defaultClassNames.token, className])}
+  <Container
+    // className={cn([defaultClassNames.token, className])}
+    className={className}
   >
     {name &&
       <input
@@ -28,17 +89,22 @@ const Token = ({
     {children}
 
     {onRemove &&
-      <button
+      <Button
         className={defaultClassNames.token}
         onClick={(event) => {
           onRemove(object);
           event.preventDefault();
         }}
       >
-        &#x00d7;
-      </button>
+        <Icon
+          viewBox="0 0 32 32"
+          title={`Remove ${children} selection`}
+        >
+          <path d="M18 16l10-10-2-2-10 10-10-10-2 2 10 10-10 10 2 2 10-10 10 10 2-2-10-10z" />
+        </Icon>
+      </Button>
     }
-  </div>
+  </Container>
 );
 
 Token.propTypes = {
