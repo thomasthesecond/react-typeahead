@@ -314,7 +314,7 @@ class Typeahead extends Component {
 
     // this.onBlur();
     // if (this.props.blurOnOptionSelected) {}
-    // this.inputElement.blur();
+    this.inputElement.blur();
 
     // console.log("onOptionSelected");
     return this.props.onOptionSelected(event, option);
