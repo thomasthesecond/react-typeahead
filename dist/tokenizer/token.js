@@ -1,62 +1,90 @@
-'use strict';
+"use strict";
 
-var React = require('react');
-var classNames = require('classnames');
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _classnames = require("classnames");
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _classNames = require("../classNames");
+
+var _classNames2 = _interopRequireDefault(_classNames);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * Encapsulates the rendering of an option that has been "selected" in a
  * TypeaheadTokenizer
  */
-var Token = React.createClass({
-  displayName: 'Token',
-
-  propTypes: {
-    className: React.PropTypes.string,
-    name: React.PropTypes.string,
-    children: React.PropTypes.string,
-    object: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.object]),
-    onRemove: React.PropTypes.func,
-    value: React.PropTypes.string
-  },
-
-  render: function render() {
-    var className = classNames(["typeahead-token", this.props.className]);
-
-    return React.createElement(
-      'div',
-      { className: className },
-      this._renderHiddenInput(),
-      this.props.children,
-      this._renderCloseButton()
-    );
-  },
-
-  _renderHiddenInput: function _renderHiddenInput() {
-    // If no name was set, don't create a hidden input
-    if (!this.props.name) {
-      return null;
-    }
-
-    return React.createElement('input', {
-      type: 'hidden',
-      name: this.props.name + '[]',
-      value: this.props.value || this.props.object
-    });
-  },
-
-  _renderCloseButton: function _renderCloseButton() {
-    if (!this.props.onRemove) {
-      return "";
-    }
-    return React.createElement(
-      'a',
-      { className: this.props.className || "typeahead-token-close", href: '#', onClick: function (event) {
-          this.props.onRemove(this.props.object);
+var Token = function Token(_ref) {
+  var className = _ref.className,
+      children = _ref.children,
+      name = _ref.name,
+      value = _ref.value,
+      object = _ref.object,
+      onRemove = _ref.onRemove;
+  return _react2.default.createElement(
+    "div",
+    {
+      className: (0, _classnames2.default)([_classNames2.default.token, className])
+    },
+    name && _react2.default.createElement("input", {
+      type: "hidden",
+      name: name + "[]",
+      value: value || object
+    }),
+    children,
+    onRemove && _react2.default.createElement(
+      "button",
+      {
+        className: "" + _classNames2.default.tokenDelete,
+        onClick: function onClick(event) {
+          onRemove(object);
           event.preventDefault();
-        }.bind(this) },
-      '\xD7'
-    );
-  }
-});
+        }
+      },
+      _react2.default.createElement(
+        "svg",
+        {
+          viewBox: "0 0 32 32",
+          title: "Remove " + children + " selection",
+          style: {
+            display: "inline-block",
+            fill: "currentColor",
+            height: "1em",
+            lineHeight: 1,
+            verticalAlign: "middle",
+            width: "1em"
+          }
+        },
+        _react2.default.createElement("path", { d: "M18 16l10-10-2-2-10 10-10-10-2 2 10 10-10 10 2 2 10-10 10 10 2-2-10-10z" })
+      )
+    )
+  );
+};
 
-module.exports = Token;
+Token.propTypes = {
+  className: _react.PropTypes.string,
+  name: _react.PropTypes.string,
+  children: _react.PropTypes.string,
+  object: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.object]),
+  onRemove: _react.PropTypes.func,
+  value: _react.PropTypes.string
+};
+
+Token.defaultProps = {
+  className: null,
+  name: null,
+  children: null,
+  object: null,
+  onRemove: null,
+  value: ""
+};
+
+exports.default = Token;

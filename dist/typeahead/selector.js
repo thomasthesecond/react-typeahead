@@ -14,9 +14,9 @@ var _option = require("./option");
 
 var _option2 = _interopRequireDefault(_option);
 
-var _classnames = require("classnames");
+var _createClassList = require("../createClassList");
 
-var _classnames2 = _interopRequireDefault(_classnames);
+var _createClassList2 = _interopRequireDefault(_createClassList);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -39,35 +39,62 @@ var TypeaheadSelector = function (_Component) {
     var _this = _possibleConstructorReturn(this, (TypeaheadSelector.__proto__ || Object.getPrototypeOf(TypeaheadSelector)).call(this, props));
 
     _this.onClick = _this.onClick.bind(_this);
+    _this.onMouseOver = _this.onMouseOver.bind(_this);
     return _this;
   }
 
+  // componentWillReceiveProps(nextProps) {
+  //   console.log("componentWillReceiveProps");
+  //   // console.log(this.props.selectionIndex, nextProps.selectionIndex);
+  //   console.log(this.props, nextProps);
+  // }
+
+  // componentDidUpdate(prevProps) {
+  //   console.log("componentDidUpdate");
+  //   console.log(this.props.selectionIndex, prevProps.selectionIndex);
+  // }
+
   _createClass(TypeaheadSelector, [{
     key: "onClick",
-    value: function onClick(result, event) {
-      return this.props.onOptionSelected(result, event);
+    value: function onClick(event, result) {
+      return this.props.onOptionSelected(event, result);
+    }
+  }, {
+    key: "onMouseOver",
+    value: function onMouseOver(event, index) {
+      return this.props.onMouseOver(event, index);
     }
   }, {
     key: "render",
     value: function render() {
       var _this2 = this;
 
+      var _props = this.props,
+          options = _props.options,
+          allowCustomValues = _props.allowCustomValues,
+          disableDefaultClassNames = _props.disableDefaultClassNames,
+          customClasses = _props.customClasses,
+          areResultsTruncated = _props.areResultsTruncated,
+          resultsTruncatedMessage = _props.resultsTruncatedMessage,
+          selectionIndex = _props.selectionIndex,
+          displayOption = _props.displayOption,
+          id = _props.id,
+          activeDescendantId = _props.activeDescendantId,
+          isVisible = _props.isVisible;
+
       // Don't render if there are no options to display
-      if (!this.props.options.length && this.props.allowCustomValues <= 0) {
+
+      if (!options.length && allowCustomValues <= 0) {
         return false;
       }
 
-      var classes = {
-        "typeahead-selector": this.props.defaultClassNames
-      };
+      var dropdownClassList = (0, _createClassList2.default)(customClasses.results, "results", disableDefaultClassNames);
 
-      classes[this.props.customClasses.results] = this.props.customClasses.results;
-
-      var classList = (0, _classnames2.default)(classes);
-
-      // CustomValue should be added to top of results list with different class name
+      // CustomValue should be added to top of
+      // results list with different class name
       var customValue = null;
       var customValueOffset = 0;
+
       if (this.props.customValue !== null) {
         customValueOffset++;
         customValue = _react2.default.createElement(
@@ -75,53 +102,68 @@ var TypeaheadSelector = function (_Component) {
           {
             ref: this.props.customValue,
             key: this.props.customValue,
-            hover: this.props.selectionIndex === 0,
-            customClasses: this.props.customClasses,
+            hover: selectionIndex === 0,
+            customClasses: customClasses,
             customValue: this.props.customValue,
             onClick: function onClick(event) {
               _this2.onClick(event, _this2.props.customValue);
-            }
+            },
+            onMouseOver: function onMouseOver(event) {
+              _this2.onMouseOver(event, 0);
+            },
+            activeDescendantId: activeDescendantId,
+            disableDefaultClassNames: disableDefaultClassNames
           },
           this.props.customValue
         );
       }
 
-      var results = this.props.options.map(function (result, index) {
-        var displayString = _this2.props.displayOption(result, index);
-        var uniqueKey = displayString + "_" + index;
+      var results = options.map(function (result, index) {
+        var displayString = displayOption(result, index);
 
         return _react2.default.createElement(
           _option2.default,
           {
-            ref: uniqueKey,
-            key: uniqueKey,
-            hover: _this2.props.selectionIndex === index + customValueOffset,
-            customClasses: _this2.props.customClasses,
-            onClick: _this2._onClick.bind(_this2, result)
+            key: displayString,
+            hover: selectionIndex === index + customValueOffset,
+            customClasses: customClasses,
+            onClick: function onClick(event) {
+              _this2.onClick(event, result);
+            },
+            onMouseOver: function onMouseOver(event) {
+              _this2.onMouseOver(event, index);
+            },
+            activeDescendantId: activeDescendantId,
+            disableDefaultClassNames: disableDefaultClassNames
           },
           displayString
         );
-      }, this);
+      });
 
-      if (this.props.areResultsTruncated && this.props.resultsTruncatedMessage !== null) {
-        var resultsTruncatedClasses = {
-          "results-truncated": this.props.defaultClassNames
-        };
-
-        resultsTruncatedClasses[this.props.customClasses.resultsTruncated] = this.props.customClasses.resultsTruncated;
-
-        var resultsTruncatedClassList = (0, _classnames2.default)(resultsTruncatedClasses);
+      if (areResultsTruncated && resultsTruncatedMessage) {
+        var resultsTruncatedClassList = (0, _createClassList2.default)(customClasses.resultsTruncated, "resultsTruncated", disableDefaultClassNames);
 
         results.push(_react2.default.createElement(
           "li",
-          { key: "results-truncated", className: resultsTruncatedClassList },
-          this.props.resultsTruncatedMessage
+          {
+            className: resultsTruncatedClassList,
+            key: "results-truncated"
+          },
+          resultsTruncatedMessage
         ));
       }
 
       return _react2.default.createElement(
         "ul",
-        { className: classList },
+        {
+          id: id,
+          className: dropdownClassList,
+          role: "listbox",
+          "aria-hidden": !isVisible,
+          style: {
+            display: isVisible ? "block" : "none"
+          }
+        },
         customValue,
         results
       );
@@ -135,22 +177,36 @@ TypeaheadSelector.propTypes = {
   displayOption: _react.PropTypes.func.isRequired,
   options: _react.PropTypes.array,
   allowCustomValues: _react.PropTypes.number,
-  customClasses: _react.PropTypes.object,
+  customClasses: _react.PropTypes.shape({
+    results: _react.PropTypes.string,
+    resultsTruncated: _react.PropTypes.string
+  }),
   customValue: _react.PropTypes.string,
   selectionIndex: _react.PropTypes.number,
   onOptionSelected: _react.PropTypes.func,
-  defaultClassNames: _react.PropTypes.bool,
+  onMouseOver: _react.PropTypes.func,
+  disableDefaultClassNames: _react.PropTypes.bool,
   areResultsTruncated: _react.PropTypes.bool,
-  resultsTruncatedMessage: _react.PropTypes.string
+  resultsTruncatedMessage: _react.PropTypes.string,
+  id: _react.PropTypes.string,
+  activeDescendantId: _react.PropTypes.string,
+  isVisible: _react.PropTypes.bool
 };
 
 TypeaheadSelector.defaultProps = {
-  selectionIndex: null,
-  customClasses: {},
+  options: [],
   allowCustomValues: 0,
+  customClasses: {},
   customValue: null,
-  onOptionSelected: function onOptionSelected(option) {},
-  defaultClassNames: true
+  selectionIndex: null,
+  onOptionSelected: function onOptionSelected() {},
+  onMouseOver: function onMouseOver() {},
+  disableDefaultClassNames: false,
+  areResultsTruncated: false,
+  resultsTruncatedMessage: null,
+  id: "",
+  activeDescendantId: "",
+  isVisible: false
 };
 
 exports.default = TypeaheadSelector;

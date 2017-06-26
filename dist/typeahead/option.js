@@ -1,66 +1,156 @@
-'use strict';
+"use strict";
 
-var React = require('react');
-var classNames = require('classnames');
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _classnames = require("classnames");
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _classNames = require("../classNames");
+
+var _classNames2 = _interopRequireDefault(_classNames);
+
+var _createClassList = require("../createClassList");
+
+var _createClassList2 = _interopRequireDefault(_createClassList);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 /**
  * A single option within the TypeaheadSelector
  */
-var TypeaheadOption = React.createClass({
-  displayName: 'TypeaheadOption',
+var TypeaheadOption = function (_Component) {
+  _inherits(TypeaheadOption, _Component);
 
-  propTypes: {
-    customClasses: React.PropTypes.object,
-    customValue: React.PropTypes.string,
-    onClick: React.PropTypes.func,
-    children: React.PropTypes.string,
-    hover: React.PropTypes.bool
-  },
+  function TypeaheadOption(props) {
+    _classCallCheck(this, TypeaheadOption);
 
-  getDefaultProps: function getDefaultProps() {
-    return {
-      customClasses: {},
-      onClick: function onClick(event) {
-        event.preventDefault();
-      }
-    };
-  },
+    var _this = _possibleConstructorReturn(this, (TypeaheadOption.__proto__ || Object.getPrototypeOf(TypeaheadOption)).call(this, props));
 
-  render: function render() {
-    var classes = {};
-    classes[this.props.customClasses.hover || "hover"] = !!this.props.hover;
-    classes[this.props.customClasses.listItem] = !!this.props.customClasses.listItem;
-
-    if (this.props.customValue) {
-      classes[this.props.customClasses.customAdd] = !!this.props.customClasses.customAdd;
-    }
-
-    var classList = classNames(classes);
-
-    return React.createElement(
-      'li',
-      { className: classList, onClick: this._onClick },
-      React.createElement(
-        'a',
-        { href: 'javascript: void 0;', className: this._getClasses(), ref: 'anchor' },
-        this.props.children
-      )
-    );
-  },
-
-  _getClasses: function _getClasses() {
-    var classes = {
-      "typeahead-option": true
-    };
-    classes[this.props.customClasses.listAnchor] = !!this.props.customClasses.listAnchor;
-
-    return classNames(classes);
-  },
-
-  _onClick: function _onClick(event) {
-    event.preventDefault();
-    return this.props.onClick(event);
+    _this.onClick = _this.onClick.bind(_this);
+    _this.onMouseOver = _this.onMouseOver.bind(_this);
+    return _this;
   }
-});
 
-module.exports = TypeaheadOption;
+  _createClass(TypeaheadOption, [{
+    key: "onClick",
+    value: function onClick(event) {
+      event.preventDefault();
+
+      return this.props.onClick(event);
+    }
+  }, {
+    key: "onMouseOver",
+    value: function onMouseOver(event) {
+      event.preventDefault();
+
+      return this.props.onMouseOver(event);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      var _props = this.props,
+          customClasses = _props.customClasses,
+          disableDefaultClassNames = _props.disableDefaultClassNames,
+          customValue = _props.customValue,
+          children = _props.children,
+          hover = _props.hover,
+          activeDescendantId = _props.activeDescendantId;
+
+
+      var classes = _defineProperty({}, _classNames2.default.listItem, !disableDefaultClassNames);
+
+      classes[customClasses.hover || _classNames2.default.hover] = !!hover;
+      classes[customClasses.listItem] = !!customClasses.listItem;
+
+      if (customValue) {
+        classes[customClasses.customAdd || _classNames2.default.customAdd] = !!customClasses.customAdd;
+      }
+
+      var classList = (0, _classnames2.default)(classes);
+
+      var optionClassList = (0, _createClassList2.default)(customClasses.listAnchor, "listAnchor", disableDefaultClassNames);
+
+      return _react2.default.createElement(
+        "li",
+        {
+          id: hover ? activeDescendantId : null,
+          className: classList,
+          role: "option",
+          "aria-selected": hover,
+          onClick: this.onClick,
+          onMouseOver: this.onMouseOver,
+          style: {
+            backgroundColor: hover ? "rgba(0,0,0,.2)" : "#fff"
+          }
+        },
+        _react2.default.createElement(
+          "div",
+          {
+            className: optionClassList,
+            ref: function ref(node) {
+              return _this2.option = node;
+            },
+            style: {
+              cursor: "default"
+            }
+          },
+          children
+        )
+      );
+    }
+  }]);
+
+  return TypeaheadOption;
+}(_react.Component);
+
+TypeaheadOption.propTypes = {
+  customClasses: _react.PropTypes.shape({
+    customAdd: _react.PropTypes.string,
+    hover: _react.PropTypes.string,
+    listAnchor: _react.PropTypes.string,
+    listItem: _react.PropTypes.string
+  }),
+  customValue: _react.PropTypes.string,
+  onClick: _react.PropTypes.func,
+  onMouseOver: _react.PropTypes.func,
+  children: _react.PropTypes.string,
+  hover: _react.PropTypes.bool,
+  activeDescendantId: _react.PropTypes.string,
+  disableDefaultClassNames: _react.PropTypes.bool
+};
+
+TypeaheadOption.defaultProps = {
+  customClasses: null,
+  customValue: null,
+  onClick: function onClick(event) {
+    event.preventDefault();
+  },
+  onMouseOver: function onMouseOver(event) {
+    event.preventDefault();
+  },
+  children: null,
+  hover: false,
+  activeDescendantId: "",
+  disableDefaultClassNames: false
+};
+
+exports.default = TypeaheadOption;

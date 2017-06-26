@@ -13,7 +13,12 @@ var Accessor = function () {
     _classCallCheck(this, Accessor);
   }
 
-  _createClass(Accessor, [{
+  _createClass(Accessor, null, [{
+    key: "identityFunction",
+    value: function identityFunction(input) {
+      return input;
+    }
+  }, {
     key: "generateAccessor",
     value: function generateAccessor(field) {
       return function (object) {
@@ -24,12 +29,12 @@ var Accessor = function () {
     key: "generateOptionToStringFor",
     value: function generateOptionToStringFor(prop) {
       if (typeof prop === "string") {
-        return this.generateAccessor(prop);
+        return Accessor.generateAccessor(prop);
       } else if (typeof prop === "function") {
         return prop;
-      } else {
-        return Accessor.identityFunction;
       }
+
+      return Accessor.identityFunction;
     }
   }, {
     key: "valueForOption",
@@ -38,14 +43,9 @@ var Accessor = function () {
         return object[option];
       } else if (typeof option === "function") {
         return option(object);
-      } else {
-        return object;
       }
-    }
-  }], [{
-    key: "identityFunction",
-    value: function identityFunction(input) {
-      return input;
+
+      return object;
     }
   }]);
 
@@ -53,4 +53,3 @@ var Accessor = function () {
 }();
 
 exports.default = Accessor;
-;
