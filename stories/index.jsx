@@ -4,8 +4,8 @@ import { withKnobs } from "@storybook/addon-knobs";
 import data from "./data.json";
 // import { Typeahead, Tokenizer } from "../lib/react-typeahead";
 // import Tokenizer from "../lib/react-typeahead";
-import Typeahead from "../lib/typeahead";
-import Tokenizer from "../lib/tokenizer";
+import Typeahead from "../dist/typeahead";
+import Tokenizer from "../dist/tokenizer";
 
 // console.log(Typeahead);
 // console.log(Tokenizer);
