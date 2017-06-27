@@ -10,6 +10,10 @@ var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require("prop-types");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _classnames = require("classnames");
 
 var _classnames2 = _interopRequireDefault(_classnames);
@@ -280,30 +284,30 @@ var TypeaheadTokenizer = function (_Component) {
 }(_react.Component);
 
 TypeaheadTokenizer.propTypes = {
-  className: _react.PropTypes.string,
-  name: _react.PropTypes.string,
-  options: _react.PropTypes.array,
-  customClasses: _react.PropTypes.object,
-  allowCustomValues: _react.PropTypes.number,
-  defaultSelected: _react.PropTypes.array,
-  initialValue: _react.PropTypes.string,
-  placeholder: _react.PropTypes.string,
-  disabled: _react.PropTypes.bool,
-  inputProps: _react.PropTypes.object,
-  onTokenRemove: _react.PropTypes.func,
-  onKeyDown: _react.PropTypes.func,
-  onKeyPress: _react.PropTypes.func,
-  onKeyUp: _react.PropTypes.func,
-  onTokenAdd: _react.PropTypes.func,
-  onFocus: _react.PropTypes.func,
-  onBlur: _react.PropTypes.func,
-  filterOption: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.func]),
-  searchOptions: _react.PropTypes.func,
-  displayOption: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.func]),
-  formInputOption: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.func]),
-  maxVisible: _react.PropTypes.number,
-  resultsTruncatedMessage: _react.PropTypes.string,
-  disableDefaultClassNames: _react.PropTypes.bool
+  className: _propTypes2.default.string,
+  name: _propTypes2.default.string,
+  options: _propTypes2.default.array,
+  customClasses: _propTypes2.default.object,
+  allowCustomValues: _propTypes2.default.number,
+  defaultSelected: _propTypes2.default.array,
+  initialValue: _propTypes2.default.string,
+  placeholder: _propTypes2.default.string,
+  disabled: _propTypes2.default.bool,
+  inputProps: _propTypes2.default.object,
+  onTokenRemove: _propTypes2.default.func,
+  onKeyDown: _propTypes2.default.func,
+  onKeyPress: _propTypes2.default.func,
+  onKeyUp: _propTypes2.default.func,
+  onTokenAdd: _propTypes2.default.func,
+  onFocus: _propTypes2.default.func,
+  onBlur: _propTypes2.default.func,
+  filterOption: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.func]),
+  searchOptions: _propTypes2.default.func,
+  displayOption: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.func]),
+  formInputOption: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.func]),
+  maxVisible: _propTypes2.default.number,
+  resultsTruncatedMessage: _propTypes2.default.string,
+  disableDefaultClassNames: _propTypes2.default.bool
 };
 
 TypeaheadTokenizer.defaultProps = {

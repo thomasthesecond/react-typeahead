@@ -10,6 +10,10 @@ var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require("prop-types");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _fuzzy = require("fuzzy");
 
 var _fuzzy2 = _interopRequireDefault(_fuzzy);
@@ -824,47 +828,47 @@ var Typeahead = function (_Component) {
 }(_react.Component);
 
 Typeahead.propTypes = {
-  name: _react.PropTypes.string,
-  className: _react.PropTypes.string,
-  customClasses: _react.PropTypes.shape({
-    hover: _react.PropTypes.string,
-    input: _react.PropTypes.string,
-    listAnchor: _react.PropTypes.string,
-    listItem: _react.PropTypes.string,
-    results: _react.PropTypes.string,
-    resultsTruncated: _react.PropTypes.string,
-    customAdd: _react.PropTypes.string
+  name: _propTypes2.default.string,
+  className: _propTypes2.default.string,
+  customClasses: _propTypes2.default.shape({
+    hover: _propTypes2.default.string,
+    input: _propTypes2.default.string,
+    listAnchor: _propTypes2.default.string,
+    listItem: _propTypes2.default.string,
+    results: _propTypes2.default.string,
+    resultsTruncated: _propTypes2.default.string,
+    customAdd: _propTypes2.default.string
   }),
-  maxVisible: _react.PropTypes.number,
-  resultsTruncatedMessage: _react.PropTypes.string,
-  options: _react.PropTypes.array,
-  allowCustomValues: _react.PropTypes.number,
-  initialValue: _react.PropTypes.string,
-  value: _react.PropTypes.string,
-  placeholder: _react.PropTypes.string,
-  disabled: _react.PropTypes.bool,
-  textarea: _react.PropTypes.bool,
+  maxVisible: _propTypes2.default.number,
+  resultsTruncatedMessage: _propTypes2.default.string,
+  options: _propTypes2.default.array,
+  allowCustomValues: _propTypes2.default.number,
+  initialValue: _propTypes2.default.string,
+  value: _propTypes2.default.string,
+  placeholder: _propTypes2.default.string,
+  disabled: _propTypes2.default.bool,
+  textarea: _propTypes2.default.bool,
   // inputProps: PropTypes.object,
-  inputId: _react.PropTypes.string,
-  inputName: _react.PropTypes.string,
-  autoFocus: _react.PropTypes.bool,
-  required: _react.PropTypes.bool,
-  onOptionSelected: _react.PropTypes.func,
-  onChange: _react.PropTypes.func,
-  onKeyDown: _react.PropTypes.func,
-  onKeyPress: _react.PropTypes.func,
-  onKeyUp: _react.PropTypes.func,
-  onFocus: _react.PropTypes.func,
-  onBlur: _react.PropTypes.func,
-  filterOption: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.func]),
-  searchOptions: _react.PropTypes.func,
-  displayOption: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.func]),
-  inputDisplayOption: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.func]),
-  formInputOption: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.func]),
-  disableDefaultClassNames: _react.PropTypes.bool,
-  customListComponent: _react.PropTypes.oneOfType([_react.PropTypes.element, _react.PropTypes.func]),
-  showOptionsWhenEmpty: _react.PropTypes.bool,
-  style: _react.PropTypes.objectOf(_react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.number, _react.PropTypes.object]))
+  inputId: _propTypes2.default.string,
+  inputName: _propTypes2.default.string,
+  autoFocus: _propTypes2.default.bool,
+  required: _propTypes2.default.bool,
+  onOptionSelected: _propTypes2.default.func,
+  onChange: _propTypes2.default.func,
+  onKeyDown: _propTypes2.default.func,
+  onKeyPress: _propTypes2.default.func,
+  onKeyUp: _propTypes2.default.func,
+  onFocus: _propTypes2.default.func,
+  onBlur: _propTypes2.default.func,
+  filterOption: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.func]),
+  searchOptions: _propTypes2.default.func,
+  displayOption: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.func]),
+  inputDisplayOption: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.func]),
+  formInputOption: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.func]),
+  disableDefaultClassNames: _propTypes2.default.bool,
+  customListComponent: _propTypes2.default.oneOfType([_propTypes2.default.element, _propTypes2.default.func]),
+  showOptionsWhenEmpty: _propTypes2.default.bool,
+  style: _propTypes2.default.objectOf(_propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number, _propTypes2.default.object]))
 };
 
 Typeahead.defaultProps = {

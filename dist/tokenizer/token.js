@@ -8,6 +8,10 @@ var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require("prop-types");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _classnames = require("classnames");
 
 var _classnames2 = _interopRequireDefault(_classnames);
@@ -70,12 +74,12 @@ var Token = function Token(_ref) {
 };
 
 Token.propTypes = {
-  className: _react.PropTypes.string,
-  name: _react.PropTypes.string,
-  children: _react.PropTypes.string,
-  object: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.object]),
-  onRemove: _react.PropTypes.func,
-  value: _react.PropTypes.string
+  className: _propTypes2.default.string,
+  name: _propTypes2.default.string,
+  children: _propTypes2.default.string,
+  object: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.object]),
+  onRemove: _propTypes2.default.func,
+  value: _propTypes2.default.string
 };
 
 Token.defaultProps = {

@@ -10,6 +10,10 @@ var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require("prop-types");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _classnames = require("classnames");
 
 var _classnames2 = _interopRequireDefault(_classnames);
@@ -120,19 +124,19 @@ var TypeaheadOption = function (_Component) {
 }(_react.Component);
 
 TypeaheadOption.propTypes = {
-  customClasses: _react.PropTypes.shape({
-    customAdd: _react.PropTypes.string,
-    hover: _react.PropTypes.string,
-    listAnchor: _react.PropTypes.string,
-    listItem: _react.PropTypes.string
+  customClasses: _propTypes2.default.shape({
+    customAdd: _propTypes2.default.string,
+    hover: _propTypes2.default.string,
+    listAnchor: _propTypes2.default.string,
+    listItem: _propTypes2.default.string
   }),
-  customValue: _react.PropTypes.string,
-  onClick: _react.PropTypes.func,
-  onMouseOver: _react.PropTypes.func,
-  children: _react.PropTypes.string,
-  hover: _react.PropTypes.bool,
-  activeDescendantId: _react.PropTypes.string,
-  disableDefaultClassNames: _react.PropTypes.bool
+  customValue: _propTypes2.default.string,
+  onClick: _propTypes2.default.func,
+  onMouseOver: _propTypes2.default.func,
+  children: _propTypes2.default.string,
+  hover: _propTypes2.default.bool,
+  activeDescendantId: _propTypes2.default.string,
+  disableDefaultClassNames: _propTypes2.default.bool
 };
 
 TypeaheadOption.defaultProps = {

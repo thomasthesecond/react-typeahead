@@ -10,6 +10,10 @@ var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require("prop-types");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _option = require("./option");
 
 var _option2 = _interopRequireDefault(_option);
@@ -174,23 +178,23 @@ var TypeaheadSelector = function (_Component) {
 }(_react.Component);
 
 TypeaheadSelector.propTypes = {
-  displayOption: _react.PropTypes.func.isRequired,
-  options: _react.PropTypes.array,
-  allowCustomValues: _react.PropTypes.number,
-  customClasses: _react.PropTypes.shape({
-    results: _react.PropTypes.string,
-    resultsTruncated: _react.PropTypes.string
+  displayOption: _propTypes2.default.func.isRequired,
+  options: _propTypes2.default.array,
+  allowCustomValues: _propTypes2.default.number,
+  customClasses: _propTypes2.default.shape({
+    results: _propTypes2.default.string,
+    resultsTruncated: _propTypes2.default.string
   }),
-  customValue: _react.PropTypes.string,
-  selectionIndex: _react.PropTypes.number,
-  onOptionSelected: _react.PropTypes.func,
-  onMouseOver: _react.PropTypes.func,
-  disableDefaultClassNames: _react.PropTypes.bool,
-  areResultsTruncated: _react.PropTypes.bool,
-  resultsTruncatedMessage: _react.PropTypes.string,
-  id: _react.PropTypes.string,
-  activeDescendantId: _react.PropTypes.string,
-  isVisible: _react.PropTypes.bool
+  customValue: _propTypes2.default.string,
+  selectionIndex: _propTypes2.default.number,
+  onOptionSelected: _propTypes2.default.func,
+  onMouseOver: _propTypes2.default.func,
+  disableDefaultClassNames: _propTypes2.default.bool,
+  areResultsTruncated: _propTypes2.default.bool,
+  resultsTruncatedMessage: _propTypes2.default.string,
+  id: _propTypes2.default.string,
+  activeDescendantId: _propTypes2.default.string,
+  isVisible: _propTypes2.default.bool
 };
 
 TypeaheadSelector.defaultProps = {
