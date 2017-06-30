@@ -813,7 +813,7 @@ var Typeahead = function (_Component) {
           onChange: this.onChange,
           onKeyDown: this.onKeyDown,
           onKeyPress: onKeyPress,
-          onKeyUp: onKeyUp,
+          onKeyUp: onKeyUp.bind(this),
           onFocus: this.onFocus,
           onBlur: this.onBlur
         }),
