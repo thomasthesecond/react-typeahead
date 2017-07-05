@@ -101,7 +101,8 @@ var TypeaheadOption = function (_Component) {
           role: "option",
           "aria-selected": hover,
           onClick: this.onClick,
-          onMouseOver: this.onMouseOver
+          onMouseDown: this.onClick // https://github.com/fmoo/react-typeahead/pull/235
+          , onMouseOver: this.onMouseOver
         },
         _react2.default.createElement(
           "div",

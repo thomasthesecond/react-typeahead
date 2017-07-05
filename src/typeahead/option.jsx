@@ -63,6 +63,7 @@ class TypeaheadOption extends Component {
         role="option"
         aria-selected={hover}
         onClick={this.onClick}
+        onMouseDown={this.onClick} // https://github.com/fmoo/react-typeahead/pull/235
         onMouseOver={this.onMouseOver}
       >
         {/* <button
