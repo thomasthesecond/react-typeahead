@@ -125,7 +125,6 @@ var Typeahead = function (_Component) {
     _this.navDown = _this.navDown.bind(_this);
     _this.navUp = _this.navUp.bind(_this);
     _this.onChange = _this.onChange.bind(_this);
-    _this.onKeyUp = _this.onKeyUp.bind(_this);
     _this.onKeyDown = _this.onKeyDown.bind(_this);
     _this.onFocus = _this.onFocus.bind(_this);
     _this.onBlur = _this.onBlur.bind(_this);
@@ -572,13 +571,6 @@ var Typeahead = function (_Component) {
       this.onTextEntryUpdated();
     }
   }, {
-    key: "onKeyUp",
-    value: function onKeyUp(event) {
-      event.preventDefault();
-
-      return this.props.onKeyUp(event);
-    }
-  }, {
     key: "onKeyDown",
     value: function onKeyDown(event) {
       /**
@@ -821,7 +813,7 @@ var Typeahead = function (_Component) {
           onChange: this.onChange,
           onKeyDown: this.onKeyDown,
           onKeyPress: onKeyPress,
-          onKeyUp: this.onKeyUp,
+          onKeyUp: onKeyUp,
           onFocus: this.onFocus,
           onBlur: this.onBlur
         }),

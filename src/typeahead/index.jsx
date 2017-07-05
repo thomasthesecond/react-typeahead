@@ -79,7 +79,6 @@ class Typeahead extends Component {
     this.navDown = this.navDown.bind(this);
     this.navUp = this.navUp.bind(this);
     this.onChange = this.onChange.bind(this);
-    this.onKeyUp = this.onKeyUp.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onFocus = this.onFocus.bind(this);
     this.onBlur = this.onBlur.bind(this);
@@ -499,12 +498,6 @@ class Typeahead extends Component {
     this.onTextEntryUpdated();
   }
 
-  onKeyUp(event) {
-    event.preventDefault();
-
-    return this.props.onKeyUp(event);
-  }
-
   onKeyDown(event) {
     /**
      * If there are no visible elements, don't perform selector
@@ -730,7 +723,7 @@ class Typeahead extends Component {
           onChange={this.onChange}
           onKeyDown={this.onKeyDown}
           onKeyPress={onKeyPress}
-          onKeyUp={this.onKeyUp}
+          onKeyUp={onKeyUp}
           onFocus={this.onFocus}
           onBlur={this.onBlur}
         />
